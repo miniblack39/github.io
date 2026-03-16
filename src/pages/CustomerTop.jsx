@@ -20,6 +20,11 @@ export default function CustomerTop() {
       <h1>いらっしゃいませ！</h1>
       <p>座席番号：{tableId}番</p>
       <button onClick={handleStart}>注文を開始する</button>
+
+      <hr />
+      <button onClick={() => navigate("/staff/orders")}>
+        開発用-staffページへ移動する
+      </button>
     </div>
   );
 }

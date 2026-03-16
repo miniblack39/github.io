@@ -60,6 +60,11 @@ export default function MenuPage() {
           注文履歴
         </button>
 
+        <button onClick={() => navigate("/c/1")}>開発用-TOP画面へ</button>
+        <button onClick={() => navigate("/staff/orders")}>
+          開発用-STAFF画面へ
+        </button>
+
         <button
           className={Styles.btnCheckout}
           disabled={orderHistory.length === 0}

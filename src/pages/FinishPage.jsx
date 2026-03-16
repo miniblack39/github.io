@@ -22,6 +22,12 @@ export default function FinishPage() {
     <div>
       <h2>ありがとうございました！</h2>
       <p>またのご来店をお待ちしております。</p>
+      <button onClick={() => navigate(`/c/${tableId}`)}>
+        開発用-トップに戻る
+      </button>
+      <button onClick={() => navigate("/staff/orders")}>
+        開発用-スタッフ画面へ
+      </button>
     </div>
   );
 }
