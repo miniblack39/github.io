@@ -1,0 +1,122 @@
+// CartDrawer
+
+.cartDrawer
+  display: flex
+  flex-direction: column
+  height: 100%
+  padding: 12px
+  background-color: #f5f5f5
+
+.cartTitle
+  font-size: 16px
+  font-weight: bold
+  color: #2d4a2d
+  padding-bottom: 8px
+  border-bottom: 2px solid #2d4a2d
+  margin-bottom: 12px
+
+.cartHeader
+  display: grid
+  grid-template-columns: 1fr 40px 36px 36px 36px
+  padding: 8px 12px
+  background-color: #f0f0f0
+  border-bottom: 2px solid #ddd
+  font-size: 12px
+  font-weight: bold
+  color: #666
+  gap: 6px
+  text-align: center
+
+.cartItem
+  display: grid
+  grid-template-columns: 1fr 40px 36px 36px 36px
+  align-items: center
+  padding: 10px 12px
+  border-bottom: 1px solid #ddd
+  gap: 6px
+
+.cartItem
+  display:flex
+  align-items:center
+  padding: 8px 12px
+  gap:8px
+  border-bottom: 1px solid #eee
+
+.itemName
+  flex:1
+  font-size: 13px
+  font-weight: bold
+  margin-bottom: 4px
+
+.itemSub
+  font-size: 12px
+  color: #888
+
+.itemRow
+  display: flex
+  align-items: center
+  gap: 6px
+  margin-top: 4px
+
+.itemPrice
+  font-size: 12px
+  color: #666
+  flex: 1
+
+
+.qtyNum
+  font-size: 14px
+  text-align: center
+  min-width: 40px
+
+
+.btnQty
+  width: 36px
+  height: 36px
+  border: 1px solid #ddd
+  background: white
+  cursor: pointer
+  font-size: 16px
+  display: flex
+  align-items: center
+  justify-content: center
+  margin: 0 auto
+  &:hover
+    background: #eee
+
+.btnDelete
+  width: 36px
+  height: 36px
+  background: #fee
+  border: 1px solid #fcc
+  color: #c0392b
+  cursor: pointer
+  font-size: 16px
+  display: flex
+  align-items: center
+  justify-content: center
+  margin: 0 auto
+  &:hover
+    background: #fcc
+
+.cartFooter
+  padding-top: 12px
+  border-top: 2px solid #eee
+  display: flex
+  justify-content: center
+
+.btnOrder
+  width: 100%
+  padding: 14px
+  background-color: #2d4a2d
+  color: white
+  border: none
+  border-radius: 4px
+  cursor: pointer
+  font-size: 16px
+  font-weight: bold
+  &:hover:not(:disabled)
+    background-color: #1e331e
+  &:disabled
+    background-color: #999
+    cursor: not-allowed
