@@ -18,7 +18,7 @@ import Styles from "./MenuPage.module.sass";
 export default function MenuPage() {
   const { tableId } = useParams();
   const navigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState("limited");
+  const [selectedCategory, setSelectedCategory] = useState("yakitori");
   const [categories, setCategories] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
