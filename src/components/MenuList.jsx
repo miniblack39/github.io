@@ -29,7 +29,6 @@ export default function MenuList({ selectedCategory, setCartItems }) {
   return (
     <div className={Styles.menulist}>
       <hr />
-      <p>今選んでいるのは{selectedCategory}</p>
       {/* grid表示 */}
       <div className={Styles.grid}>
         {products
