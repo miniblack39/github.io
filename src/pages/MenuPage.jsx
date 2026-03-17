@@ -186,8 +186,8 @@ export default function MenuPage() {
                     {(() => {
                       const date = order.createdAt?.toDate
                         ? order.createdAt.toDate()
-                        : order.createdAt; // Timestampなら変換、Dateならそのまま
-                      return date instanceof Date // dateが有効な日付オブジェクトか確認
+                        : order.createdAt;
+                      return date instanceof Date
                         ? date.toLocaleTimeString("ja-JP", {
                             hour: "2-digit",
                             minute: "2-digit",
