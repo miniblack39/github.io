@@ -155,6 +155,29 @@ export default function MenuPage() {
           <div className={Styles.modal}>
             <p className={Styles.modalTitle}>注文履歴</p>
 
+            <p className={Styles.modalTotal}>
+              合計:{" "}
+              {orderHistory.reduce(
+                (sum, order) =>
+                  sum +
+                  (order.items || []).reduce(
+                    (s, item) => s + item.price * item.quantity,
+                    0,
+                  ),
+                0,
+              )}
+              円
+            </p>
+
+            <div className={Styles.modalButtons}>
+              <button
+                className={Styles.btnClose}
+                onClick={() => setIsOrderHistoryOpen(false)}
+              >
+                閉じる
+              </button>
+            </div>
+
             {orderHistory.map((order, orderIndex) => (
               <div key={orderIndex}>
                 <div className={Styles.orderHeader}>
@@ -187,27 +210,6 @@ export default function MenuPage() {
                 <hr />
               </div>
             ))}
-            <p className={Styles.modalTotal}>
-              合計:{" "}
-              {orderHistory.reduce(
-                (sum, order) =>
-                  sum +
-                  (order.items || []).reduce(
-                    (s, item) => s + item.price * item.quantity,
-                    0,
-                  ),
-                0,
-              )}
-              円
-            </p>
-            <div className={Styles.modalButtons}>
-              <button
-                className={Styles.btnClose}
-                onClick={() => setIsOrderHistoryOpen(false)}
-              >
-                閉じる
-              </button>
-            </div>
           </div>
         </div>
       )}
