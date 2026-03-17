@@ -154,8 +154,21 @@ export default function MenuPage() {
         <div className={Styles.overlay}>
           <div className={Styles.modal}>
             <p className={Styles.modalTitle}>注文履歴</p>
+
             {orderHistory.map((order, orderIndex) => (
               <div key={orderIndex}>
+                <div className={Styles.orderHeader}>
+                  <span className={Styles.orderTime}>
+                    注文時刻:{" "}
+                    {order.createdAt?.toDate
+                      ? order.createdAt.toDate().toLocaleTimeString("ja-JP", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "不明"}
+                  </span>
+                </div>
+
                 {order.items.map((item, index) => (
                   <div key={index}>
                     {item.name}
