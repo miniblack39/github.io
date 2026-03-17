@@ -151,37 +151,46 @@ export default function MenuPage() {
       )}
 
       {isOrderHistoryOpen && (
-        <div>
-          <h3>注文履歴</h3>
-          {orderHistory.map((order, orderIndex) => (
-            <div key={orderIndex}>
-              {order.items.map((item, index) => (
-                <div key={index}>
-                  {item.name}
-                  {item.subOptions && ` (${item.subOptions})`}
-                  {item.price}円{item.quantity}
-                  {item.unit}
-                  小計: {item.price * item.quantity}円
-                  {item.isServed && " 提供済み"}
-                </div>
-              ))}
-              <hr />
+        <div className={Styles.overlay}>
+          <div className={Styles.modal}>
+            <p className={Styles.modalTitle}>注文履歴</p>
+            {orderHistory.map((order, orderIndex) => (
+              <div key={orderIndex}>
+                {order.items.map((item, index) => (
+                  <div key={index}>
+                    {item.name}
+                    {item.subOptions && ` (${item.subOptions})`}
+                    {item.price}円{item.quantity}
+                    {item.unit}
+                    小計: {item.price * item.quantity}円
+                    {item.isServed && " 提供済み"}
+                  </div>
+                ))}
+                <hr />
+              </div>
+            ))}
+            <p className={Styles.modalTotal}>
+              合計:{" "}
+              {orderHistory.reduce(
+                (sum, order) =>
+                  sum +
+                  (order.items || []).reduce(
+                    (s, item) => s + item.price * item.quantity,
+                    0,
+                  ),
+                0,
+              )}
+              円
+            </p>
+            <div className={Styles.modalButtons}>
+              <button
+                className={Styles.btnClose}
+                onClick={() => setIsOrderHistoryOpen(false)}
+              >
+                閉じる
+              </button>
             </div>
-          ))}
-          <p>
-            合計:{" "}
-            {orderHistory.reduce(
-              (sum, order) =>
-                sum +
-                (order.items || []).reduce(
-                  (s, item) => s + item.price * item.quantity,
-                  0,
-                ),
-              0,
-            )}
-            円
-          </p>
-          <button onClick={() => setIsOrderHistoryOpen(false)}>閉じる</button>
+          </div>
         </div>
       )}
     </div>
