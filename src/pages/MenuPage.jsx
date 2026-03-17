@@ -160,12 +160,17 @@ export default function MenuPage() {
                 <div className={Styles.orderHeader}>
                   <span className={Styles.orderTime}>
                     注文時刻:{" "}
-                    {order.createdAt?.toDate
-                      ? order.createdAt.toDate().toLocaleTimeString("ja-JP", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })
-                      : "不明"}
+                    {(() => {
+                      const date = order.createdAt?.toDate
+                        ? order.createdAt.toDate()
+                        : order.createdAt; // Timestampなら変換、Dateならそのまま
+                      return date instanceof Date // dateが有効な日付オブジェクトか確認
+                        ? date.toLocaleTimeString("ja-JP", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : "不明";
+                    })()}
                   </span>
                 </div>
 
