@@ -67,7 +67,7 @@ export default function CartDrawer({
           </button>
         </div>
       ))}
-      <p>カート</p>
+
       <div className={Styles.cartFooter}>
         <button
           className={Styles.btnOrder}
