@@ -17,7 +17,12 @@ export default function CartDrawer({
       </div>
       {cartItems.map((item) => (
         <div key={item.cartId} className={Styles.cartItem}>
-          <span className={Styles.itemName}>{item.name}</span>
+          <span className={Styles.itemName}>
+            {item.name}
+            {item.subOption && (
+              <span className={Styles.itemsub}>{item.subOption}</span>
+            )}
+          </span>
           <span className={Styles.qtyNum}>
             {item.quantity}
             {item.unit}
