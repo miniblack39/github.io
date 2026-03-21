@@ -46,6 +46,9 @@ export default function MenuList({ selectedCategory, setCartItems }) {
               <div className={Styles.cardBody}>
                 <p className={Styles.cardName}>{p.name}</p>
                 <p className={Styles.cardPrice}>{p.price}円</p>
+                {p.subOptions && p.subOptions.length > 0 && (
+                  <p className={Styles.cardSub}>{p.subOptions.join(" · ")}</p>
+                )}
               </div>
             </div>
           ))}
