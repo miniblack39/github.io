@@ -4,29 +4,30 @@
   display: flex
   gap: 8px
   padding: 12px 16px
-  background-color: #fff
+  background-color: #2d4a2d
   border-bottom: 1px solid #ddd
   overflow-x: auto
   flex-shrink: 0
 .btn
-  padding: 8px 20px
-  border: 1px solid #2d4a2d
+  padding: 8px 16px
+  border: 1px solid rgba(255, 255, 255, 0.6)
+  background: transparent
+  color: white
+  border-radius: 20px
+  cursor: pointer
+  font-size: 14px
+  white-space: nowrap
+  flex-shrink: 0
+  &:hover
+    background: rgba(255, 255, 255, 0.1)
+
+.btnActive
+  padding: 8px 16px
+  border: 1px solid white
   background: white
   color: #2d4a2d
   border-radius: 20px
   cursor: pointer
   font-size: 14px
   white-space: nowrap
-  &:hover
-    background: #2d4a2d
-    color: white
-
-.btnActive
-  padding: 8px 20px
-  border: 1px solid #2d4a2d
-  background: #2d4a2d
-  color: white
-  border-radius: 20px
-  cursor: pointer
-  font-size: 14px
-  white-space: nowrap
+  flex-shrink: 0
