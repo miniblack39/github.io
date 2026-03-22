@@ -2,7 +2,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { QR_codeSVG } from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function CustomerTop() {
   const navigate = useNavigate();
