@@ -17,7 +17,6 @@ export default function CustomerTop() {
     setSessionId(newSessionId);
     await setDoc(doc(db, "tables", tableId), {
       status: "occupied",
-      sessionId: newSessionId,
       updatedAt: new Date(),
     });
     navigate(`/c/${newSessionId}/menu`);
