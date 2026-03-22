@@ -8,8 +8,6 @@ import {
   query,
   where,
   orderBy,
-  getDoc,
-  doc,
 } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryList from "../components/CategoryList";

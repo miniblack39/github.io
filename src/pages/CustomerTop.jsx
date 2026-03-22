@@ -3,12 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../firebase";
 import { doc, setDoc } from "firebase/firestore";
 import { QR_codeSVG } from "qrcode.react";
-import { useState } from "react";
 
 export default function CustomerTop() {
   const navigate = useNavigate();
   const { tableId } = useParams();
-  const [sessionId, setSessionId] = useState(null);
 
   const generateSessionId = () => {
     return Math.random().toString(36).substring(2, 10);

@@ -14,10 +14,25 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
-  const { tableId } = useParams();
+  const { sessionId } = useParams();
   const navigate = useNavigate();
+  const [tableId, setTableId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [people, setPeople] = useState(2);
+
+  useEffect(() => {
+    const fetchTableId = async () => {
+      const q = query(
+        collection(db, "tables"),
+        where("sessionId", "==", sessionId),
+      );
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        setTableId(snapshot.docs[0].id);
+      }
+    };
+    fetchTableId();
+  }, [sessionId]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -31,18 +46,7 @@ export default function CheckoutPage() {
       setOrders(data);
     };
     fetchOrders();
-  }, []);
-
-  const handleCheckout = async () => {
-    await Promise.all(
-      orders.map((order) => deleteDoc(doc(db, "orders", order.id))),
-    );
-    await setDoc(doc(db, "tables", tableId), {
-      status: "finished",
-      updatedAt: new Date(),
-    });
-    navigate(`/c/${tableId}/finish`);
-  };
+  }, [tableId]);
 
   const allItems = orders.flatMap((order) => order.items || []);
 
@@ -66,6 +70,17 @@ export default function CheckoutPage() {
   );
 
   const perPerson = Math.ceil(total / people);
+
+  const handleCheckout = async () => {
+    await Promise.all(
+      orders.map((order) => deleteDoc(doc(db, "orders", order.id))),
+    );
+    await setDoc(doc(db, "tables", tableId), {
+      status: "finished",
+      updatedAt: new Date(),
+    });
+    navigate(`/c/${sessionId}/finish`);
+  };
 
   return (
     <div>
@@ -96,7 +111,7 @@ export default function CheckoutPage() {
 
       <button onClick={handleCheckout}>お支払い確定</button>
 
-      <button onClick={() => navigate(`/c/${tableId}/menu`)}>
+      <button onClick={() => navigate(`/c/${sessionId}/menu`)}>
         メニューに戻る
       </button>
     </div>
