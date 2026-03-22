@@ -14,7 +14,6 @@ export default function CustomerTop() {
 
   const handleStart = async () => {
     const newSessionId = generateSessionId();
-    setSessionId(newSessionId);
     await setDoc(doc(db, "tables", tableId), {
       status: "occupied",
       updatedAt: new Date(),
