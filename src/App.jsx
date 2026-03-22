@@ -12,9 +12,9 @@ function App() {
       <Routes>
         {/* お客様用 */}
         <Route path="/c/:tableId" element={<CustomerTop />} />
-        <Route path="/c/:tableId/menu" element={<MenuPage />} />
-        <Route path="/c/:tableId/finish" element={<FinishPage />} />
-        <Route path="/c/:tableId/checkout" element={<CheckoutPage />} />
+        <Route path="/c/:sessionId/menu" element={<MenuPage />} />
+        <Route path="/c/:sessionId/finish" element={<FinishPage />} />
+        <Route path="/c/:sessionId/checkout" element={<CheckoutPage />} />
 
         {/* スタッフ用 */}
         <Route path="/staff/orders" element={<StaffOrders />} />

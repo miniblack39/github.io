@@ -8,15 +8,19 @@ import {
   query,
   where,
   orderBy,
+  getDoc,
+  doc,
 } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
 import CategoryList from "../components/CategoryList";
 import MenuList from "../components/MenuList";
 import CartDrawer from "../components/CartDrawer";
 import Styles from "./MenuPage.module.sass";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function MenuPage() {
-  const { tableId } = useParams();
+  const { sessionId } = useParams();
+  const [tableId, setTableId] = useState(null);
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("yakitori");
   const [categories, setCategories] = useState([]);
@@ -25,6 +29,21 @@ export default function MenuPage() {
   const [isOrderHistoryOpen, setIsOrderHistoryOpen] = useState(false);
   const [orderHistory, setOrderHistory] = useState([]);
   const [isOrderSuccess, setIsOrderSuccess] = useState(false);
+  const [isQROpen, setIsQROpen] = useState(false);
+
+  useEffect(() => {
+    const fetchTableId = async () => {
+      const q = query(
+        collection(db, "tables"),
+        where("sessionId", "==", sessionId),
+      );
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        setTableId(snapshot.docs[0].id);
+      }
+    };
+    fetchTableId();
+  }, [sessionId]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -52,19 +71,21 @@ export default function MenuPage() {
 
   return (
     <div className={Styles.page}>
-      <div className={Styles.header}>
+      <div className={Styles.topBar}>
+        <CategoryList
+          categories={categories}
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
         <button
           className={Styles.btnHistory}
           onClick={() => setIsOrderHistoryOpen(true)}
         >
           注文履歴
         </button>
-
-        <button onClick={() => navigate("/c/1")}>開発用-TOP画面へ</button>
-        <button onClick={() => navigate("/staff/orders")}>
-          開発用-STAFF画面へ
-        </button>
-
+        <button onClick={() => setIsQROpen(true)}>QRコード</button>
+        <button onClick={() => navigate("/c/1")}>開発用-TOP</button>
+        <button onClick={() => navigate("/staff/orders")}>開発用-STAFF</button>
         <button
           className={Styles.btnCheckout}
           disabled={orderHistory.length === 0}
@@ -73,15 +94,9 @@ export default function MenuPage() {
           お会計
         </button>
       </div>
-      {/*メインのメニューエリア*/}
 
       <div className={Styles.main}>
         <div className={Styles.menuArea}>
-          <CategoryList
-            categories={categories}
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
           <MenuList
             selectedCategory={selectedCategory}
             cartItems={cartItems}
@@ -96,7 +111,6 @@ export default function MenuPage() {
           />
         </div>
       </div>
-
       {isConfirmModalOpen && (
         <div className={Styles.overlay}>
           <div className={Styles.modal}>
@@ -146,6 +160,26 @@ export default function MenuPage() {
         <div className={Styles.overlay}>
           <div className={Styles.successModal}>
             <p>ご注文を受け付けました。</p>
+          </div>
+        </div>
+      )}
+
+      {isQROpen && (
+        <div className={Styles.overlay}>
+          <div className={Styles.modal}>
+            <p className={Styles.modalTitle}>QRコードでも注文できます</p>
+            <QRCodeSVG
+              value={`${window.location.origin}/c/${sessionId}/menu`}
+              size={256}
+            />
+            <div className={Styles.modalButtons}>
+              <button
+                className={Styles.btnClose}
+                onClick={() => setIsQROpen(false)}
+              >
+                閉じる
+              </button>
+            </div>
           </div>
         </div>
       )}
