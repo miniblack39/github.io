@@ -5,7 +5,8 @@
   flex-direction: column
   height: 100%
   padding: 12px
-  background-color: #f5f5f5
+  background-color: rgba(255, 255, 255, 0.6)
+  backdrop-filter: blur(10px)
 
 .cartTitle
   font-size: 16px
@@ -19,7 +20,7 @@
   display: grid
   grid-template-columns: 1fr 40px 36px 36px 36px
   padding: 8px 12px
-  background-color: #f0f0f0
+  background-color: rgba(0, 0, 0, 0.05)
   border-bottom: 2px solid #ddd
   font-size: 12px
   font-weight: bold
@@ -35,12 +36,7 @@
   border-bottom: 1px solid #ddd
   gap: 6px
 
-.cartItem
-  display:flex
-  align-items:center
-  padding: 8px 12px
-  gap:8px
-  border-bottom: 1px solid #eee
+
 
 .itemName
   flex:1
@@ -73,8 +69,6 @@
 .btnQty
   width: 36px
   height: 36px
-  border: 1px solid #ddd
-  background: white
   cursor: pointer
   font-size: 16px
   display: flex
@@ -87,8 +81,6 @@
 .btnDelete
   width: 36px
   height: 36px
-  background: #fee
-  border: 1px solid #fcc
   color: #c0392b
   cursor: pointer
   font-size: 16px

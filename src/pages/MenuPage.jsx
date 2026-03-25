@@ -55,6 +55,7 @@ export default function MenuPage() {
 
   useEffect(() => {
     const fetchOrderHistory = async () => {
+      if (!tableId) return;
       const q = query(
         collection(db, "orders"),
         where("tableId", "==", tableId),
@@ -75,19 +76,19 @@ export default function MenuPage() {
           selectedCategory={selectedCategory}
           onCategoryChange={setSelectedCategory}
         />
+        <button onClick={() => setIsQROpen(true)}>QRコード</button>
+        <button onClick={() => navigate("/c/1")}>開発用-TOP</button>
+        <button onClick={() => navigate("/staff/orders")}>開発用-STAFF</button>
         <button
           className={Styles.btnHistory}
           onClick={() => setIsOrderHistoryOpen(true)}
         >
           注文履歴
         </button>
-        <button onClick={() => setIsQROpen(true)}>QRコード</button>
-        <button onClick={() => navigate("/c/1")}>開発用-TOP</button>
-        <button onClick={() => navigate("/staff/orders")}>開発用-STAFF</button>
         <button
           className={Styles.btnCheckout}
           disabled={orderHistory.length === 0}
-          onClick={() => navigate(`/c/${tableId}/checkout`)}
+          onClick={() => navigate(`/c/${sessionId}/checkout`)}
         >
           お会計
         </button>
@@ -138,6 +139,7 @@ export default function MenuPage() {
                     items: cartItems,
                     createdAt: new Date(),
                     tableId: tableId,
+                    sessionId: sessionId,
                   };
                   await addDoc(collection(db, "orders"), newOrder);
                   setOrderHistory((prev) => [newOrder, ...prev]);
@@ -185,63 +187,86 @@ export default function MenuPage() {
       {isOrderHistoryOpen && (
         <div className={Styles.overlay}>
           <div className={Styles.modal}>
-            <p className={Styles.modalTitle}>注文履歴</p>
+            <div className={Styles.modalHeader}>
+              <p className={Styles.modalTitle}>注文履歴</p>
 
-            <p className={Styles.modalTotal}>
-              合計:{" "}
-              {orderHistory.reduce(
-                (sum, order) =>
-                  sum +
-                  (order.items || []).reduce(
-                    (s, item) => s + item.price * item.quantity,
+              <div className={Styles.headerRight}>
+                <p className={Styles.modalTotal}>
+                  合計:{" "}
+                  {orderHistory.reduce(
+                    (sum, order) =>
+                      sum +
+                      (order.items || []).reduce(
+                        (s, item) => s + item.price * item.quantity,
+                        0,
+                      ),
                     0,
-                  ),
-                0,
-              )}
-              円
-            </p>
-
-            <div className={Styles.modalButtons}>
-              <button
-                className={Styles.btnClose}
-                onClick={() => setIsOrderHistoryOpen(false)}
-              >
-                閉じる
-              </button>
+                  )}
+                  円
+                </p>
+                <button
+                  className={Styles.btnClose}
+                  onClick={() => setIsOrderHistoryOpen(false)}
+                >
+                  閉じる
+                </button>
+              </div>
             </div>
 
-            {orderHistory.map((order, orderIndex) => (
-              <div key={orderIndex}>
-                <div className={Styles.orderHeader}>
-                  <span className={Styles.orderTime}>
-                    注文時刻:{" "}
-                    {(() => {
-                      const date = order.createdAt?.toDate
-                        ? order.createdAt.toDate()
-                        : order.createdAt;
-                      return date instanceof Date
-                        ? date.toLocaleTimeString("ja-JP", {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
-                        : "不明";
-                    })()}
-                  </span>
-                </div>
-
-                {order.items.map((item, index) => (
-                  <div key={index}>
-                    {item.name}
-                    {item.subOptions && ` (${item.subOptions})`}
-                    {item.price}円{item.quantity}
-                    {item.unit}
-                    小計: {item.price * item.quantity}円
-                    {item.isServed && " 提供済み"}
+            <div className={Styles.orderListScroll}>
+              {orderHistory.map((order, orderIndex) => (
+                <div key={orderIndex} className={Styles.orderGroup}>
+                  <div className={Styles.orderHeader}>
+                    <span className={Styles.orderTime}>
+                      注文時刻:{" "}
+                      {(() => {
+                        const date = order.createdAt?.toDate
+                          ? order.createdAt.toDate()
+                          : order.createdAt;
+                        return date instanceof Date
+                          ? date.toLocaleTimeString("ja-JP", {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })
+                          : "不明";
+                      })()}
+                    </span>
+                    <span className={Styles.orderSubTotal}>
+                      小計:{" "}
+                      {order.items.reduce(
+                        (s, i) => s + i.price * i.quantity,
+                        0,
+                      )}
+                      円
+                    </span>
                   </div>
-                ))}
-                <hr />
-              </div>
-            ))}
+
+                  <div className={Styles.orderItems}>
+                    {order.items.map((item, index) => (
+                      <div key={index} className={Styles.historyItemRow}>
+                        <div className={Styles.historyItemMain}>
+                          <span className={Styles.historyItemName}>
+                            {item.name}
+                          </span>
+                          {item.subOptions && (
+                            <span className={Styles.historyItemSub}>
+                              ({item.subOptions})
+                            </span>
+                          )}
+                        </div>
+                        <div className={Styles.historyItemQty}>
+                          {item.quantity}
+                          {item.unit}
+                        </div>
+                        <div className={Styles.historyItemPrice}>
+                          {item.price * item.quantity}円
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

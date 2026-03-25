@@ -1,0 +1,161 @@
+.container
+  max-width: 600px
+  margin: 0 auto
+  padding: 20px
+  background: #f9f9f9
+  min-height: 100vh
+
+.title
+  font-size: 24px
+  color: #2d4a2d
+  text-align: center
+  margin-bottom: 8px
+  font-weight: bold
+
+.tableNumber
+  font-size: 18px
+  color: #666
+  text-align: center
+  margin-bottom: 24px
+  background: white
+  padding: 8px
+  border-radius: 20px
+  display: inline-block
+  width: 100%
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05)
+
+.itemList
+  background: white
+  border-radius: 12px
+  padding: 10px 20px
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08)
+  margin-bottom: 24px
+
+.itemRow
+  display: flex
+  justify-content: space-between
+  align-items: center
+  padding: 15px 0
+  border-bottom: 1px dashed #ddd
+  &:last-child
+    border-bottom: none
+
+.itemNameBlock
+  display: flex
+  flex-direction: column
+  gap: 4px
+
+.itemName
+  font-size: 16px
+  font-weight: bold
+  color: #333
+
+.itemSub
+  font-size: 12px
+  color: #888
+
+.itemDetail
+  text-align: right
+
+.itemQty
+  font-size: 14px
+  color: #666
+  margin-right: 10px
+
+.itemTotal
+  font-size: 16px
+  font-weight: bold
+  color: #333
+
+.totalArea
+  background: #2d4a2d
+  color: white
+  padding: 20px
+  border-radius: 12px
+  display: flex
+  justify-content: space-between
+  align-items: center
+  margin-bottom: 24px
+
+.totalLabel
+  font-size: 18px
+
+.totalAmount
+  font-size: 28px
+  font-weight: bold
+
+.splitSection
+  background: #fff
+  border: 2px solid #e0e0e0
+  border-radius: 12px
+  padding: 20px
+  text-align: center
+  margin-bottom: 30px
+
+.splitTitle
+  font-size: 16px
+  color: #555
+  margin-bottom: 15px
+  display: block
+
+.splitControl
+  display: flex
+  justify-content: center
+  align-items: center
+  gap: 30px
+  margin-bottom: 15px
+
+.btnCircle
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  border: 1px solid #2d4a2d
+  background: white
+  color: #2d4a2d
+  font-size: 24px
+  cursor: pointer
+  display: flex
+  justify-content: center
+  align-items: center
+  transition: all 0.2s
+  &:active
+    background: #2d4a2d
+    color: white
+
+.peopleCount
+  font-size: 24px
+  font-weight: bold
+  min-width: 60px
+
+.perPersonText
+  font-size: 20px
+  font-weight: bold
+  color: #c0392b
+  border-top: 1px solid #eee
+  padding-top: 10px
+
+.btnCheckout
+  width: 100%
+  padding: 18px
+  background: #c0392b
+  color: white
+  border: none
+  border-radius: 50px
+  font-size: 20px
+  font-weight: bold
+  cursor: pointer
+  box-shadow: 0 4px 15px rgba(192, 57, 43, 0.3)
+  margin-bottom: 15px
+  transition: transform 0.1s
+  &:active
+    transform: scale(0.98)
+
+.btnBack
+  width: 100%
+  padding: 12px
+  background: transparent
+  border: 1px solid #999
+  color: #666
+  border-radius: 50px
+  font-size: 16px
+  cursor: pointer

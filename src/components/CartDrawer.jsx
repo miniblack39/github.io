@@ -19,8 +19,8 @@ export default function CartDrawer({
         <div key={item.cartId} className={Styles.cartItem}>
           <span className={Styles.itemName}>
             {item.name}
-            {item.subOption && (
-              <span className={Styles.itemsub}>{item.subOption}</span>
+            {item.subOptions && (
+              <span className={Styles.itemSub}>{item.subOptions}</span>
             )}
           </span>
           <span className={Styles.qtyNum}>

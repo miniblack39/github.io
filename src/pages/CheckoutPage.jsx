@@ -4,6 +4,7 @@ import { db } from "../firebase";
 import {
   collection,
   getDocs,
+  getDoc,
   query,
   where,
   orderBy,
@@ -12,6 +13,7 @@ import {
   setDoc,
 } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
+import Styles from "./CheckoutPage.module.sass";
 
 export default function CheckoutPage() {
   const { sessionId } = useParams();
@@ -19,6 +21,7 @@ export default function CheckoutPage() {
   const [tableId, setTableId] = useState(null);
   const [orders, setOrders] = useState([]);
   const [people, setPeople] = useState(2);
+  const [tableName, setTableName] = useState("");
 
   useEffect(() => {
     const fetchTableId = async () => {
@@ -48,6 +51,17 @@ export default function CheckoutPage() {
     fetchOrders();
   }, [tableId]);
 
+  useEffect(() => {
+    const getTable = async () => {
+      if (!tableId) return;
+      const snap = await getDoc(doc(db, "tables", tableId));
+      if (snap.exists()) {
+        setTableName(snap.data().name || tableId);
+      }
+    };
+    getTable();
+  }, [tableId]);
+
   const allItems = orders.flatMap((order) => order.items || []);
 
   const mergedItems = allItems.reduce((acc, item) => {
@@ -72,46 +86,92 @@ export default function CheckoutPage() {
   const perPerson = Math.ceil(total / people);
 
   const handleCheckout = async () => {
-    await Promise.all(
-      orders.map((order) => deleteDoc(doc(db, "orders", order.id))),
-    );
-    await setDoc(doc(db, "tables", tableId), {
-      status: "finished",
-      updatedAt: new Date(),
-    });
-    navigate(`/c/${sessionId}/finish`);
+    if (!sessionId) return;
+
+    try {
+      await Promise.all(
+        orders.map((order) => deleteDoc(doc(db, "orders", order.id))),
+      );
+
+      await setDoc(
+        doc(db, "tables", tableId),
+        {
+          status: "finished",
+          updatedAt: new Date(),
+        },
+        { merge: true },
+      );
+
+      navigate(`/c/${sessionId}/finish`);
+    } catch (e) {
+      console.error("お会計エラー:", e);
+    }
   };
 
   return (
-    <div>
-      <h2>お会計</h2>
-      <h3>テーブル: {tableId}</h3>
+    <div className={Styles.container}>
+      <h2 className={Styles.title}>お会計</h2>
+      <div className={Styles.tableNumber}>
+        テーブル: {tableName || "読み込み中..."}
+      </div>
 
-      {itemList.map((item) => (
-        <div key={item.cartId}>
-          {item.name}
-          {item.subOptions && ` (${item.subOptions})`}
-          {item.price}円 × {item.quantity}
-          {item.unit}
-          小計: {item.price * item.quantity}円
+      <div className={Styles.itemList}>
+        {itemList.map((item) => (
+          <div key={item.cartId} className={Styles.itemRow}>
+            <div className={Styles.itemNameBlock}>
+              <span className={Styles.itemName}>{item.name}</span>
+              {item.subOptions && (
+                <span className={Styles.itemSub}>({item.subOptions})</span>
+              )}
+            </div>
+            <div className={Styles.itemDetail}>
+              <span className={Styles.itemQty}>
+                {item.price}円 × {item.quantity}
+                {item.unit}
+              </span>
+              <span className={Styles.itemTotal}>
+                {item.price * item.quantity}円
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className={Styles.totalArea}>
+        <span className={Styles.totalLabel}>合計金額</span>
+        <span className={Styles.totalAmount}>{total.toLocaleString()}円</span>
+      </div>
+
+      <div className={Styles.splitSection}>
+        <span className={Styles.splitTitle}>割り勘計算</span>
+        <div className={Styles.splitControl}>
+          <button
+            className={Styles.btnCircle}
+            onClick={() => setPeople((prev) => (prev > 1 ? prev - 1 : 1))}
+          >
+            －
+          </button>
+          <span className={Styles.peopleCount}>{people}名</span>
+          <button
+            className={Styles.btnCircle}
+            onClick={() => setPeople((prev) => prev + 1)}
+          >
+            ＋
+          </button>
         </div>
-      ))}
+        <p className={Styles.perPersonText}>
+          お一人様: {perPerson.toLocaleString()}円
+        </p>
+      </div>
 
-      <p>合計: {total}円</p>
-
-      <hr />
-
-      <h3>割り勘計算</h3>
-      <button onClick={() => setPeople((prev) => (prev > 1 ? prev - 1 : 1))}>
-        －
+      <button className={Styles.btnCheckout} onClick={handleCheckout}>
+        お支払い確定
       </button>
-      <span>{people}人</span>
-      <button onClick={() => setPeople((prev) => prev + 1)}>＋</button>
-      <p>1人あたり: {perPerson}円（切り上げ）</p>
 
-      <button onClick={handleCheckout}>お支払い確定</button>
-
-      <button onClick={() => navigate(`/c/${sessionId}/menu`)}>
+      <button
+        className={Styles.btnBack}
+        onClick={() => navigate(`/c/${sessionId}/menu`)}
+      >
         メニューに戻る
       </button>
     </div>

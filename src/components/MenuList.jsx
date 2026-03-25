@@ -10,7 +10,7 @@ export default function MenuList({ selectedCategory, setCartItems }) {
   const [isMenuModalOpen, setIsMenuModalOpen] = useState(false);
   const [selectedMenuItem, setSelectedMenuItem] = useState(null);
   const [quantities, setQuantities] = useState(1);
-  const [selectedSubcategory, setSelectedSubcategory] = useState("タレ");
+  const [selectedSubcategory, setSelectedSubcategory] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,8 +27,7 @@ export default function MenuList({ selectedCategory, setCartItems }) {
   }, []);
 
   return (
-    <div className={Styles.menulist}>
-      <hr />
+    <div className={Styles.menuList}>
       {/* grid表示 */}
       <div className={Styles.grid}>
         {products
@@ -40,6 +39,11 @@ export default function MenuList({ selectedCategory, setCartItems }) {
               onClick={() => {
                 setIsMenuModalOpen(true);
                 setSelectedMenuItem(p);
+                if (p.subOptions && p.subOptions.length > 0) {
+                  setSelectedSubcategory(p.subOptions[0]);
+                } else {
+                  setSelectedSubcategory("");
+                }
               }}
             >
               <img className={Styles.cardImage} src={p.imageUrl} alt={p.name} />

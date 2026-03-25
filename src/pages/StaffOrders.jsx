@@ -11,6 +11,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import Styles from "./StaffOrders.module.sass";
 
 export default function StaffOrders() {
   const [orders, setOrders] = useState([]);
@@ -70,56 +71,108 @@ export default function StaffOrders() {
     );
 
   return (
-    <div>
-      <button onClick={() => navigate("/c/1")}>開発用-お客様TOPへ戻る</button>
-      <button onClick={() => navigate("/c/1/menu")}>開発用-menu画面へ</button>
-      <button onClick={() => navigate("/staff/orders")}>
-        開発用-STAFF画面へ
-      </button>
+    <div className={Styles.container}>
+      <div className={Styles.header}>
+        <button className={Styles.btnNav} onClick={() => navigate("/c/1")}>
+          開発用-お客様TOPへ戻る
+        </button>
+        <button className={Styles.btnNav} onClick={() => navigate("/c/1/menu")}>
+          開発用-menu画面へ
+        </button>
+        <button
+          className={Styles.btnNav}
+          onClick={() => navigate("/staff/orders")}
+        >
+          開発用-STAFF画面へ
+        </button>
+      </div>
       <hr />
-      <h2>注文一覧</h2>
+      <h2 className={Styles.title}>注文一覧</h2>
 
-      <div>
+      <div className={Styles.tableTabs}>
         {tableIds.map((tableId) => (
-          <button key={tableId} onClick={() => setSelectedTable(tableId)}>
-            {tableId === "all" ? "全テーブル" : `テーブル${tableId}`}
+          <button
+            key={tableId}
+            className={
+              selectedTable === tableId ? Styles.tabActive : Styles.tab
+            }
+            onClick={() => setSelectedTable(tableId)}
+          >
+            {tableId === "all"
+              ? "全テーブル"
+              : `テーブル${tables.find((t) => t.id === tableId)?.name || tableId}`}
           </button>
         ))}
       </div>
 
-      <button onClick={() => setShowUnservedOnly(!showUnservedOnly)}>
+      <button
+        className={Styles.btnToggle}
+        onClick={() => setShowUnservedOnly(!showUnservedOnly)}
+      >
         {showUnservedOnly ? "全て表示" : "未提供のみ表示"}
       </button>
 
       {selectedTable !== "all" && isFinished(selectedTable) && (
-        <button onClick={() => handleBussing(selectedTable)}>
-          バッシング完了（テーブル{selectedTable}）
+        <button
+          className={Styles.btnBussing}
+          onClick={() => handleBussing(selectedTable)}
+        >
+          バッシング完了（テーブル
+          {tables.find((t) => t.id === selectedTable)?.name || selectedTable}）
         </button>
       )}
-
-      {displayOrders.map((order) => (
-        <div key={order.id}>
-          <p>テーブル: {order.tableId}</p>
-          <p>
-            注文時間: {order.createdAt?.toDate().toLocaleTimeString("ja-JP")}
-          </p>
-          {order.items.map((item, index) => (
-            <div key={index}>
-              {item.name}
-              {item.subOptions && ` (${item.subOptions})`}×{item.quantity}
-              {item.unit}
-              {item.isServed ? (
-                <span> ✅ 提供済み</span>
-              ) : (
-                <button onClick={() => handleItemServed(order.id, index)}>
-                  提供済みにする
-                </button>
-              )}
+      <div className={Styles.orderGrid}>
+        {displayOrders.map((order) => (
+          <div key={order.id} className={Styles.orderCard}>
+            <div className={Styles.orderHeader}>
+              <span className={Styles.tableLabel}>
+                テーブル:{" "}
+                {tables.find((t) => t.id === order.tableId)?.name ||
+                  order.tableId}
+              </span>
+              <span className={Styles.orderTime}>
+                注文時間:{" "}
+                {(() => {
+                  if (!order.createdAt) return "不明";
+                  const date = order.createdAt.toDate
+                    ? order.createdAt.toDate()
+                    : order.createdAt;
+                  return date.toLocaleTimeString("ja-JP", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit",
+                  });
+                })()}
+              </span>
             </div>
-          ))}
-          <hr />
-        </div>
-      ))}
+            {order.items.map((item, index) => (
+              <div key={index} className={Styles.itemRow}>
+                <div className={Styles.itemInfo}>
+                  <span className={Styles.itemName}>{item.name}</span>
+                  {item.subOptions && (
+                    <span className={Styles.itemSub}>({item.subOptions})</span>
+                  )}
+                  <span className={Styles.itemQty}>
+                    × {item.quantity}
+                    {item.unit}
+                  </span>
+                </div>
+                {item.isServed ? (
+                  <span className={Styles.servedBadge}>済</span>
+                ) : (
+                  <button
+                    className={Styles.btnServe}
+                    onClick={() => handleItemServed(order.id, index)}
+                  >
+                    提供
+                  </button>
+                )}
+              </div>
+            ))}
+            <hr />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

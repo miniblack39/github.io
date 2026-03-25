@@ -8,18 +8,20 @@ import FinishPage from "./pages/FinishPage";
 
 function App() {
   return (
-    <BrowserRouter basename="/">
-      <Routes>
-        {/* お客様用 */}
-        <Route path="/c/:tableId" element={<CustomerTop />} />
-        <Route path="/c/:sessionId/menu" element={<MenuPage />} />
-        <Route path="/c/:sessionId/finish" element={<FinishPage />} />
-        <Route path="/c/:sessionId/checkout" element={<CheckoutPage />} />
+    <div className="app-container">
+      <BrowserRouter basename="/">
+        <Routes>
+          {/* お客様用 */}
+          <Route path="/c/:tableId" element={<CustomerTop />} />
+          <Route path="/c/:sessionId/menu" element={<MenuPage />} />
+          <Route path="/c/:sessionId/finish" element={<FinishPage />} />
+          <Route path="/c/:sessionId/checkout" element={<CheckoutPage />} />
 
-        {/* スタッフ用 */}
-        <Route path="/staff/orders" element={<StaffOrders />} />
-      </Routes>
-    </BrowserRouter>
+          {/* スタッフ用 */}
+          <Route path="/staff/orders" element={<StaffOrders />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
