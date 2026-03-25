@@ -10,6 +10,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useParams, useNavigate } from "react-router-dom";
+import Styles from "./FinishPage.module.sass";
 
 export default function FinishPage() {
   const { sessionId } = useParams();
@@ -42,15 +43,32 @@ export default function FinishPage() {
   }, [tableId]);
 
   return (
-    <div>
-      <h2>ありがとうございました!</h2>
-      <p>またのご来店をお待ちしております。</p>
-      <button onClick={() => navigate(`/c/${tableId}`)}>
-        開発用-トップに戻る
-      </button>
-      <button onClick={() => navigate("/staff/orders")}>
-        開発用-スタッフ画面へ
-      </button>
+    <div className={Styles.container}>
+      <div className={Styles.card}>
+        <div className={Styles.iconArea}></div>
+        <h2 className={Styles.title}>ありがとうございました！</h2>
+        <p className={Styles.message}>
+          またのご来店を、スタッフ一同
+          <br />
+          心よりお待ちしております。
+        </p>
+      </div>
+
+      <div className={Styles.devSection}>
+        <span className={Styles.devTitle}>開発用ショートカット</span>
+        <button
+          className={Styles.btnDev}
+          onClick={() => navigate(`/c/${tableId}`)}
+        >
+          トップに戻る
+        </button>
+        <button
+          className={Styles.btnDev}
+          onClick={() => navigate("/staff/orders")}
+        >
+          スタッフ画面へ
+        </button>
+      </div>
     </div>
   );
 }
